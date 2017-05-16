@@ -5,12 +5,12 @@ Image Docker pour Nmap
 
 ## Utilisation
 ```
-docker run --rm tvoyat/nmap /usr/bin/nmap -sC -p445 --open --max-hostgroup 3 --script smb-vuln-ms17-010.nse nas2.in.ac-amiens.fr
+docker run --rm tvoyat/nmap -p445 --open --script smb-vuln-ms17-010.nse nas2.in.ac-amiens.fr
 ```
 
 ### Pour un  réseau complet :
 ```
-docker run --rm tvoyat/nmap /usr/bin/nmap -sC -p445 --open --max-hostgroup 3 --script smb-vuln-ms17-010.nse 172.30.176.0/20 | tee /tmp/fichier_log.txt
+docker run --rm tvoyat/nmap -p445 --open --script smb-vuln-ms17-010.nse 172.30.176.0/20 | tee /tmp/fichier_log.txt
 ```
 
 ## Installation
