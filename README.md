@@ -1,7 +1,8 @@
 # NMAP
 
-Image Docker pour Nmap 
+Image Docker pour Nmap v7.40 basée sur Alpine v3.2
 
+[![](https://badge.imagelayers.io/voyat/nmap:latest.svg)](https://imagelayers.io/?images=voyat/nmap:latest 'Get your own badge on imagelayers.io')
 
 ## Utilisation :
 
@@ -15,6 +16,7 @@ Pour un réseau complet :
 docker run --rm voyat/nmap -p445 --open --script smb-vuln-ms17-010.nse 172.30.176.0/20 | tee /tmp/fichier_log.txt
 ```
 
+A titre d'information, ce scan dure moins de 10 minutes pour 4096 IPs dont 975 up
 
 
 ## Construction image en local (si pas accès au hub docker)
@@ -33,7 +35,7 @@ docker build $BUILD_ARG -t voyat/nmap .
 Ajout MS17-010
 
 ```
-wget -O FILES/smb-vuln-ms17-010.nse https://github.com/cldrn/nmap-nse-scripts/blob/master/scripts/smb-vuln-ms17-010.nse?raw=true
+wget -O FILES/smb-vuln-ms17-010.nse https://svn.nmap.org/nmap/scripts/smb-vuln-ms17-010.nse
 ```
 
 
@@ -41,5 +43,12 @@ wget -O FILES/smb-vuln-ms17-010.nse https://github.com/cldrn/nmap-nse-scripts/bl
 ## Rapport simple 
 N'affiche que le nom et l'ip des serveurs vulnérables détectés
 ```
-grep -Pazo "(?s)Nmap scan report for ([^\n]*)\n.{10,150}VULNERABLE" /tmp/fichier_log.txt| tr -d '()' | awk '/^Nmap scan/ { if (NF<6) { $6=$5; $5="???"}; print $5";" $6}'
+grep -Pazo "(?s)Nmap scan report for ([^\n]*)\n.{10,230}VULNERABLE" /tmp/fichier_log.txt| tr -d '()' | awk '/^Nmap scan/ { if (NF<6) { $6=$5; $5="???"}; print $5";" $6}'
+```
+
+## Informations de workgroup :
+```
+docker run --rm voyat/nmap  --script smb-os-discovery.nse -p445 \
+    $(grep -Pazo "(?s)Nmap scan report for ([^\n]*)\n.{10,230}VULNERABLE" /tmp/fichier_log.txt| tr -d '()' | \
+    awk '/^Nmap scan/ { print $NF}') | tee /tmp/netbios_log.txt
 ```
