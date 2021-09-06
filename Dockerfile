@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:edge
 
 MAINTAINER Thierry VOYAT <thierry.voyat@ac-amiens.fr>
 
@@ -18,7 +18,8 @@ RUN apk update \
     && rm -rf /var/cache/apk/*
 
 # Les scripts nmap à inclure
-COPY FILES/. /usr/share/nmap/scripts/
+#COPY FILES/. /usr/share/nmap/scripts/
+COPY FILES/. /tmp/
 
 ENTRYPOINT ["/usr/bin/nmap"]
 CMD ["--help"]
